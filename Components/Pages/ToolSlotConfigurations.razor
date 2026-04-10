@@ -146,260 +146,27 @@
                 </FilterTemplate>
             </PropertyColumn>
 
-            <PropertyColumn Property="x => x.FCL1" Title="FCL1">
-                <CellTemplate>
-                    <input type="text"
-                           class="tsc-cell-input"
-                           @bind="context.Item.FCL1"
-                           @bind:event="oninput"
-                           @onkeydown="@(e => OnKeyDownAsync(e, context.Item))"
-                           readonly="@(!IsEditing(context.Item))" />
-                </CellTemplate>
-                <FilterTemplate>
-                    <ColumnValuesFilter T="ToolSlotConfigurationDTO"
-                                        Context="@context"
-                                        Source="_items"
-                                        ValueSelector="@(x => x.FCL1)" />
-                </FilterTemplate>
-            </PropertyColumn>
-
-            <PropertyColumn Property="x => x.FCL2" Title="FCL2">
-                <CellTemplate>
-                    <input type="text"
-                           class="tsc-cell-input"
-                           @bind="context.Item.FCL2"
-                           @bind:event="oninput"
-                           @onkeydown="@(e => OnKeyDownAsync(e, context.Item))"
-                           readonly="@(!IsEditing(context.Item))" />
-                </CellTemplate>
-                <FilterTemplate>
-                    <ColumnValuesFilter T="ToolSlotConfigurationDTO"
-                                        Context="@context"
-                                        Source="_items"
-                                        ValueSelector="@(x => x.FCL2)" />
-                </FilterTemplate>
-            </PropertyColumn>
-
-            <PropertyColumn Property="x => x.FCR1" Title="FCR1">
-                <CellTemplate>
-                    <input type="text"
-                           class="tsc-cell-input"
-                           @bind="context.Item.FCR1"
-                           @bind:event="oninput"
-                           @onkeydown="@(e => OnKeyDownAsync(e, context.Item))"
-                           readonly="@(!IsEditing(context.Item))" />
-                </CellTemplate>
-                <FilterTemplate>
-                    <ColumnValuesFilter T="ToolSlotConfigurationDTO"
-                                        Context="@context"
-                                        Source="_items"
-                                        ValueSelector="@(x => x.FCR1)" />
-                </FilterTemplate>
-            </PropertyColumn>
-
-            <PropertyColumn Property="x => x.FFL1" Title="FFL1">
-                <CellTemplate>
-                    <input type="text"
-                           class="tsc-cell-input"
-                           @bind="context.Item.FFL1"
-                           @bind:event="oninput"
-                           @onkeydown="@(e => OnKeyDownAsync(e, context.Item))"
-                           readonly="@(!IsEditing(context.Item))" />
-                </CellTemplate>
-                <FilterTemplate>
-                    <ColumnValuesFilter T="ToolSlotConfigurationDTO"
-                                        Context="@context"
-                                        Source="_items"
-                                        ValueSelector="@(x => x.FFL1)" />
-                </FilterTemplate>
-            </PropertyColumn>
-
-            <PropertyColumn Property="x => x.FFL2" Title="FFL2">
-                <CellTemplate>
-                    <input type="text"
-                           class="tsc-cell-input"
-                           @bind="context.Item.FFL2"
-                           @bind:event="oninput"
-                           @onkeydown="@(e => OnKeyDownAsync(e, context.Item))"
-                           readonly="@(!IsEditing(context.Item))" />
-                </CellTemplate>
-                <FilterTemplate>
-                    <ColumnValuesFilter T="ToolSlotConfigurationDTO"
-                                        Context="@context"
-                                        Source="_items"
-                                        ValueSelector="@(x => x.FFL2)" />
-                </FilterTemplate>
-            </PropertyColumn>
-
-            <PropertyColumn Property="x => x.FFR1" Title="FFR1">
-                <CellTemplate>
-                    <input type="text"
-                           class="tsc-cell-input"
-                           @bind="context.Item.FFR1"
-                           @bind:event="oninput"
-                           @onkeydown="@(e => OnKeyDownAsync(e, context.Item))"
-                           readonly="@(!IsEditing(context.Item))" />
-                </CellTemplate>
-                <FilterTemplate>
-                    <ColumnValuesFilter T="ToolSlotConfigurationDTO"
-                                        Context="@context"
-                                        Source="_items"
-                                        ValueSelector="@(x => x.FFR1)" />
-                </FilterTemplate>
-            </PropertyColumn>
-
-            <PropertyColumn Property="x => x.FFR2" Title="FFR2">
-                <CellTemplate>
-                    <input type="text"
-                           class="tsc-cell-input"
-                           @bind="context.Item.FFR2"
-                           @bind:event="oninput"
-                           @onkeydown="@(e => OnKeyDownAsync(e, context.Item))"
-                           readonly="@(!IsEditing(context.Item))" />
-                </CellTemplate>
-                <FilterTemplate>
-                    <ColumnValuesFilter T="ToolSlotConfigurationDTO"
-                                        Context="@context"
-                                        Source="_items"
-                                        ValueSelector="@(x => x.FFR2)" />
-                </FilterTemplate>
-            </PropertyColumn>
-
-            <PropertyColumn Property="x => x.FFR3" Title="FFR3">
-                <CellTemplate>
-                    <input type="text"
-                           class="tsc-cell-input"
-                           @bind="context.Item.FFR3"
-                           @bind:event="oninput"
-                           @onkeydown="@(e => OnKeyDownAsync(e, context.Item))"
-                           readonly="@(!IsEditing(context.Item))" />
-                </CellTemplate>
-                <FilterTemplate>
-                    <ColumnValuesFilter T="ToolSlotConfigurationDTO"
-                                        Context="@context"
-                                        Source="_items"
-                                        ValueSelector="@(x => x.FFR3)" />
-                </FilterTemplate>
-            </PropertyColumn>
-
-            <PropertyColumn Property="x => x.FFR4" Title="FFR4">
-                <CellTemplate>
-                    <input type="text"
-                           class="tsc-cell-input"
-                           @bind="context.Item.FFR4"
-                           @bind:event="oninput"
-                           @onkeydown="@(e => OnKeyDownAsync(e, context.Item))"
-                           readonly="@(!IsEditing(context.Item))" />
-                </CellTemplate>
-                <FilterTemplate>
-                    <ColumnValuesFilter T="ToolSlotConfigurationDTO"
-                                        Context="@context"
-                                        Source="_items"
-                                        ValueSelector="@(x => x.FFR4)" />
-                </FilterTemplate>
-            </PropertyColumn>
-
-            <PropertyColumn Property="x => x.RCL1" Title="RCL1">
-                <CellTemplate>
-                    <input type="text"
-                           class="tsc-cell-input"
-                           @bind="context.Item.RCL1"
-                           @bind:event="oninput"
-                           @onkeydown="@(e => OnKeyDownAsync(e, context.Item))"
-                           readonly="@(!IsEditing(context.Item))" />
-                </CellTemplate>
-                <FilterTemplate>
-                    <ColumnValuesFilter T="ToolSlotConfigurationDTO"
-                                        Context="@context"
-                                        Source="_items"
-                                        ValueSelector="@(x => x.RCL1)" />
-                </FilterTemplate>
-            </PropertyColumn>
-
-            <PropertyColumn Property="x => x.RCR1" Title="RCR1">
-                <CellTemplate>
-                    <input type="text"
-                           class="tsc-cell-input"
-                           @bind="context.Item.RCR1"
-                           @bind:event="oninput"
-                           @onkeydown="@(e => OnKeyDownAsync(e, context.Item))"
-                           readonly="@(!IsEditing(context.Item))" />
-                </CellTemplate>
-                <FilterTemplate>
-                    <ColumnValuesFilter T="ToolSlotConfigurationDTO"
-                                        Context="@context"
-                                        Source="_items"
-                                        ValueSelector="@(x => x.RCR1)" />
-                </FilterTemplate>
-            </PropertyColumn>
-
-            <PropertyColumn Property="x => x.RCR2" Title="RCR2">
-                <CellTemplate>
-                    <input type="text"
-                           class="tsc-cell-input"
-                           @bind="context.Item.RCR2"
-                           @bind:event="oninput"
-                           @onkeydown="@(e => OnKeyDownAsync(e, context.Item))"
-                           readonly="@(!IsEditing(context.Item))" />
-                </CellTemplate>
-                <FilterTemplate>
-                    <ColumnValuesFilter T="ToolSlotConfigurationDTO"
-                                        Context="@context"
-                                        Source="_items"
-                                        ValueSelector="@(x => x.RCR2)" />
-                </FilterTemplate>
-            </PropertyColumn>
-
-            <PropertyColumn Property="x => x.RFL1" Title="RFL1">
-                <CellTemplate>
-                    <input type="text"
-                           class="tsc-cell-input"
-                           @bind="context.Item.RFL1"
-                           @bind:event="oninput"
-                           @onkeydown="@(e => OnKeyDownAsync(e, context.Item))"
-                           readonly="@(!IsEditing(context.Item))" />
-                </CellTemplate>
-                <FilterTemplate>
-                    <ColumnValuesFilter T="ToolSlotConfigurationDTO"
-                                        Context="@context"
-                                        Source="_items"
-                                        ValueSelector="@(x => x.RFL1)" />
-                </FilterTemplate>
-            </PropertyColumn>
-
-            <PropertyColumn Property="x => x.RFR1" Title="RFR1">
-                <CellTemplate>
-                    <input type="text"
-                           class="tsc-cell-input"
-                           @bind="context.Item.RFR1"
-                           @bind:event="oninput"
-                           @onkeydown="@(e => OnKeyDownAsync(e, context.Item))"
-                           readonly="@(!IsEditing(context.Item))" />
-                </CellTemplate>
-                <FilterTemplate>
-                    <ColumnValuesFilter T="ToolSlotConfigurationDTO"
-                                        Context="@context"
-                                        Source="_items"
-                                        ValueSelector="@(x => x.RFR1)" />
-                </FilterTemplate>
-            </PropertyColumn>
-
-            <PropertyColumn Property="x => x.RFR2" Title="RFR2">
-                <CellTemplate>
-                    <input type="text"
-                           class="tsc-cell-input"
-                           @bind="context.Item.RFR2"
-                           @bind:event="oninput"
-                           @onkeydown="@(e => OnKeyDownAsync(e, context.Item))"
-                           readonly="@(!IsEditing(context.Item))" />
-                </CellTemplate>
-                <FilterTemplate>
-                    <ColumnValuesFilter T="ToolSlotConfigurationDTO"
-                                        Context="@context"
-                                        Source="_items"
-                                        ValueSelector="@(x => x.RFR2)" />
-                </FilterTemplate>
-            </PropertyColumn>
+            @foreach (var col in SlotColumns)
+            {
+                var c = col;
+                <TemplateColumn @key="c.Title" Title="@c.Title"
+                                SortBy="@(x => c.Get(x) ?? string.Empty)">
+                    <CellTemplate>
+                        <input type="text"
+                               class="tsc-cell-input"
+                               value="@c.Get(context.Item)"
+                               @oninput="@(e => c.Set(context.Item, e.Value?.ToString()))"
+                               @onkeydown="@(e => OnKeyDownAsync(e, context.Item))"
+                               readonly="@(!IsEditing(context.Item))" />
+                    </CellTemplate>
+                    <FilterTemplate>
+                        <ColumnValuesFilter T="ToolSlotConfigurationDTO"
+                                            Context="@context"
+                                            Source="_items"
+                                            ValueSelector="@(x => c.Get(x))" />
+                    </FilterTemplate>
+                </TemplateColumn>
+            }
 
             <PropertyColumn Property="x => x.IsActive" Title="IsActive">
                 <CellTemplate>
@@ -431,6 +198,27 @@
     private const string FieldFamily = "FAMILY";
     private const string FieldMtCode = "MT_CODE";
     private const string FieldDestination = "DESTINATION";
+
+    private static readonly (string Title,
+        Func<ToolSlotConfigurationDTO, string?> Get,
+        Action<ToolSlotConfigurationDTO, string?> Set)[] SlotColumns =
+    [
+        ("FCL1", x => x.FCL1, (x, v) => x.FCL1 = v),
+        ("FCL2", x => x.FCL2, (x, v) => x.FCL2 = v),
+        ("FCR1", x => x.FCR1, (x, v) => x.FCR1 = v),
+        ("FFL1", x => x.FFL1, (x, v) => x.FFL1 = v),
+        ("FFL2", x => x.FFL2, (x, v) => x.FFL2 = v),
+        ("FFR1", x => x.FFR1, (x, v) => x.FFR1 = v),
+        ("FFR2", x => x.FFR2, (x, v) => x.FFR2 = v),
+        ("FFR3", x => x.FFR3, (x, v) => x.FFR3 = v),
+        ("FFR4", x => x.FFR4, (x, v) => x.FFR4 = v),
+        ("RCL1", x => x.RCL1, (x, v) => x.RCL1 = v),
+        ("RCR1", x => x.RCR1, (x, v) => x.RCR1 = v),
+        ("RCR2", x => x.RCR2, (x, v) => x.RCR2 = v),
+        ("RFL1", x => x.RFL1, (x, v) => x.RFL1 = v),
+        ("RFR1", x => x.RFR1, (x, v) => x.RFR1 = v),
+        ("RFR2", x => x.RFR2, (x, v) => x.RFR2 = v),
+    ];
 
     private MudDataGrid<ToolSlotConfigurationDTO> _grid = null!;
     private List<ToolSlotConfigurationDTO> _items = new();
@@ -469,17 +257,10 @@
         _touched.Add(FieldDestination);
     }
 
-    // Swallows the click on the cancel-button wrapper so it can be paired
-    // with @onclick:stopPropagation="true". Without this, clicking Cancel
-    // would bubble up to MudDataGrid's RowClick and immediately re-open
-    // the edit on the same row.
-    private void SuppressRowClick()
-    {
-    }
+    private void SuppressRowClick() { }
 
     private Func<ToolSlotConfigurationDTO, bool> _quickFilter => x =>
     {
-        // Always keep the row currently being edited visible.
         if (ReferenceEquals(_editingItem, x))
             return true;
 
@@ -491,13 +272,16 @@
         if (x.CID.ToString().Contains(s, StringComparison.OrdinalIgnoreCase))
             return true;
 
-        return Has(x.FAMILY) || Has(x.MT_CODE) || Has(x.DESTINATION)
-            || Has(x.FCL1) || Has(x.FCL2) || Has(x.FCR1)
-            || Has(x.FFL1) || Has(x.FFL2)
-            || Has(x.FFR1) || Has(x.FFR2) || Has(x.FFR3) || Has(x.FFR4)
-            || Has(x.RCL1) || Has(x.RCR1) || Has(x.RCR2)
-            || Has(x.RFL1) || Has(x.RFR1) || Has(x.RFR2)
-            || (x.IsActive ? "true" : "false").Contains(s, StringComparison.OrdinalIgnoreCase);
+        if (Has(x.FAMILY) || Has(x.MT_CODE) || Has(x.DESTINATION))
+            return true;
+
+        foreach (var col in SlotColumns)
+        {
+            if (Has(col.Get(x)))
+                return true;
+        }
+
+        return (x.IsActive ? "true" : "false").Contains(s, StringComparison.OrdinalIgnoreCase);
 
         bool Has(string? v) => !string.IsNullOrEmpty(v) && v.Contains(s, StringComparison.OrdinalIgnoreCase);
     };
@@ -525,33 +309,43 @@
         await TryStartEditAsync(args.Item);
     }
 
+    /// <summary>
+    /// Validates the current edit, persists if changed, and clears editing state.
+    /// Returns false if validation failed (shows the provided message) or persist failed.
+    /// </summary>
+    private async Task<bool> TryCommitEditAsync(string? validationMessage = null)
+    {
+        if (_editingItem is null)
+            return true;
+
+        if (!IsRowValid(_editingItem))
+        {
+            MarkAllRequiredTouched();
+            if (validationMessage is not null)
+                Snackbar.Add(validationMessage, Severity.Warning);
+            return false;
+        }
+
+        if (HasChanges(_editingItem, _editingSnapshot))
+        {
+            if (!await PersistAsync(_editingItem))
+                return false;
+        }
+
+        _editingItem = null;
+        _editingSnapshot = null;
+        _touched.Clear();
+        return true;
+    }
+
     private async Task TryStartEditAsync(ToolSlotConfigurationDTO item)
     {
         if (ReferenceEquals(_editingItem, item))
             return;
 
-        if (_editingItem is not null)
-        {
-            if (!IsRowValid(_editingItem))
-            {
-                MarkAllRequiredTouched();
-                Snackbar.Add(
-                    "FAMILY, MT_CODE, and DESTINATION are required. Complete the current row before switching.",
-                    Severity.Warning);
-                return;
-            }
-
-            if (HasChanges(_editingItem, _editingSnapshot))
-            {
-                var saved = await PersistAsync(_editingItem);
-                if (!saved)
-                    return;
-            }
-
-            _editingItem = null;
-            _editingSnapshot = null;
-            _touched.Clear();
-        }
+        if (!await TryCommitEditAsync(
+                "FAMILY, MT_CODE, and DESTINATION are required. Complete the current row before switching."))
+            return;
 
         _editingSnapshot = Clone(item);
         _editingItem = item;
@@ -565,25 +359,8 @@
 
         if (e.Key == "Enter")
         {
-            if (!IsRowValid(item))
-            {
-                MarkAllRequiredTouched();
-                Snackbar.Add(
-                    "FAMILY, MT_CODE, and DESTINATION are required.",
-                    Severity.Warning);
-                return;
-            }
-
-            if (HasChanges(item, _editingSnapshot))
-            {
-                var saved = await PersistAsync(item);
-                if (!saved)
-                    return;
-            }
-
-            _editingItem = null;
-            _editingSnapshot = null;
-            _touched.Clear();
+            await TryCommitEditAsync(
+                "FAMILY, MT_CODE, and DESTINATION are required.");
         }
         else if (e.Key == "Escape")
         {
@@ -596,7 +373,6 @@
         if (!ReferenceEquals(_editingItem, item))
         {
             await TryStartEditAsync(item);
-            // Edit start was blocked: do not apply the new value.
             if (!ReferenceEquals(_editingItem, item))
                 return;
         }
@@ -608,7 +384,6 @@
     {
         if (item.CID == 0)
         {
-            // Brand-new row that was never persisted — discard it.
             _items = _items.Where(x => !ReferenceEquals(x, item)).ToList();
         }
         else if (_editingSnapshot is not null && ReferenceEquals(_editingItem, item))
@@ -623,28 +398,9 @@
 
     private async Task AddNewAsync()
     {
-        if (_editingItem is not null)
-        {
-            if (!IsRowValid(_editingItem))
-            {
-                MarkAllRequiredTouched();
-                Snackbar.Add(
-                    "FAMILY, MT_CODE, and DESTINATION are required on the current row before adding a new one.",
-                    Severity.Warning);
-                return;
-            }
-
-            if (HasChanges(_editingItem, _editingSnapshot))
-            {
-                var saved = await PersistAsync(_editingItem);
-                if (!saved)
-                    return;
-            }
-
-            _editingItem = null;
-            _editingSnapshot = null;
-            _touched.Clear();
-        }
+        if (!await TryCommitEditAsync(
+                "FAMILY, MT_CODE, and DESTINATION are required on the current row before adding a new one."))
+            return;
 
         var newItem = new ToolSlotConfigurationDTO { IsActive = true };
         _items = _items.Append(newItem).ToList();
@@ -663,9 +419,6 @@
             {
                 var updated = new List<ToolSlotConfigurationDTO>(_items);
                 updated[idx] = created;
-                // Re-sort so the new row drops into its natural CID-ascending
-                // position instead of staying pinned at the top where the
-                // temporary CID=0 placeholder was prepended by AddNewAsync.
                 _items = updated.OrderBy(x => x.CID).ToList();
             }
             Snackbar.Add($"Created CID {created.CID}.", Severity.Success);
@@ -686,80 +439,48 @@
         && !string.IsNullOrWhiteSpace(item.MT_CODE)
         && !string.IsNullOrWhiteSpace(item.DESTINATION);
 
-    // Brand-new rows (no snapshot) are always treated as dirty so the
-    // CreateAsync call still runs. For existing rows, every persisted
-    // field is compared against the snapshot taken when the edit started;
-    // only a real field change counts as dirty.
     private static bool HasChanges(ToolSlotConfigurationDTO current, ToolSlotConfigurationDTO? snapshot)
     {
         if (snapshot is null)
             return true;
 
-        return !string.Equals(current.FAMILY,      snapshot.FAMILY,      StringComparison.Ordinal)
-            || !string.Equals(current.MT_CODE,     snapshot.MT_CODE,     StringComparison.Ordinal)
+        if (!string.Equals(current.FAMILY, snapshot.FAMILY, StringComparison.Ordinal)
+            || !string.Equals(current.MT_CODE, snapshot.MT_CODE, StringComparison.Ordinal)
             || !string.Equals(current.DESTINATION, snapshot.DESTINATION, StringComparison.Ordinal)
-            || !string.Equals(current.FCL1,        snapshot.FCL1,        StringComparison.Ordinal)
-            || !string.Equals(current.FCL2,        snapshot.FCL2,        StringComparison.Ordinal)
-            || !string.Equals(current.FCR1,        snapshot.FCR1,        StringComparison.Ordinal)
-            || !string.Equals(current.FFL1,        snapshot.FFL1,        StringComparison.Ordinal)
-            || !string.Equals(current.FFL2,        snapshot.FFL2,        StringComparison.Ordinal)
-            || !string.Equals(current.FFR1,        snapshot.FFR1,        StringComparison.Ordinal)
-            || !string.Equals(current.FFR2,        snapshot.FFR2,        StringComparison.Ordinal)
-            || !string.Equals(current.FFR3,        snapshot.FFR3,        StringComparison.Ordinal)
-            || !string.Equals(current.FFR4,        snapshot.FFR4,        StringComparison.Ordinal)
-            || !string.Equals(current.RCL1,        snapshot.RCL1,        StringComparison.Ordinal)
-            || !string.Equals(current.RCR1,        snapshot.RCR1,        StringComparison.Ordinal)
-            || !string.Equals(current.RCR2,        snapshot.RCR2,        StringComparison.Ordinal)
-            || !string.Equals(current.RFL1,        snapshot.RFL1,        StringComparison.Ordinal)
-            || !string.Equals(current.RFR1,        snapshot.RFR1,        StringComparison.Ordinal)
-            || !string.Equals(current.RFR2,        snapshot.RFR2,        StringComparison.Ordinal)
-            || current.IsActive != snapshot.IsActive;
+            || current.IsActive != snapshot.IsActive)
+            return true;
+
+        foreach (var col in SlotColumns)
+        {
+            if (!string.Equals(col.Get(current), col.Get(snapshot), StringComparison.Ordinal))
+                return true;
+        }
+
+        return false;
     }
 
-    private static ToolSlotConfigurationDTO Clone(ToolSlotConfigurationDTO src) => new()
+    private static ToolSlotConfigurationDTO Clone(ToolSlotConfigurationDTO src)
     {
-        CID = src.CID,
-        FAMILY = src.FAMILY,
-        MT_CODE = src.MT_CODE,
-        DESTINATION = src.DESTINATION,
-        FCL1 = src.FCL1,
-        FCL2 = src.FCL2,
-        FCR1 = src.FCR1,
-        FFL1 = src.FFL1,
-        FFL2 = src.FFL2,
-        FFR1 = src.FFR1,
-        FFR2 = src.FFR2,
-        FFR3 = src.FFR3,
-        FFR4 = src.FFR4,
-        RCL1 = src.RCL1,
-        RCR1 = src.RCR1,
-        RCR2 = src.RCR2,
-        RFL1 = src.RFL1,
-        RFR1 = src.RFR1,
-        RFR2 = src.RFR2,
-        IsActive = src.IsActive
-    };
+        var clone = new ToolSlotConfigurationDTO
+        {
+            CID = src.CID,
+            FAMILY = src.FAMILY,
+            MT_CODE = src.MT_CODE,
+            DESTINATION = src.DESTINATION,
+            IsActive = src.IsActive
+        };
+        foreach (var col in SlotColumns)
+            col.Set(clone, col.Get(src));
+        return clone;
+    }
 
     private static void RestoreFrom(ToolSlotConfigurationDTO src, ToolSlotConfigurationDTO dst)
     {
         dst.FAMILY = src.FAMILY;
         dst.MT_CODE = src.MT_CODE;
         dst.DESTINATION = src.DESTINATION;
-        dst.FCL1 = src.FCL1;
-        dst.FCL2 = src.FCL2;
-        dst.FCR1 = src.FCR1;
-        dst.FFL1 = src.FFL1;
-        dst.FFL2 = src.FFL2;
-        dst.FFR1 = src.FFR1;
-        dst.FFR2 = src.FFR2;
-        dst.FFR3 = src.FFR3;
-        dst.FFR4 = src.FFR4;
-        dst.RCL1 = src.RCL1;
-        dst.RCR1 = src.RCR1;
-        dst.RCR2 = src.RCR2;
-        dst.RFL1 = src.RFL1;
-        dst.RFR1 = src.RFR1;
-        dst.RFR2 = src.RFR2;
         dst.IsActive = src.IsActive;
+        foreach (var col in SlotColumns)
+            col.Set(dst, col.Get(src));
     }
 }
