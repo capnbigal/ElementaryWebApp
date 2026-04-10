@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -sL \"https://raw.githubusercontent.com/MudBlazor/MudBlazor/v8.15.0/src/MudBlazor/Components/DataGrid/Cell.razor.cs\" -o /c/temp/cell.cs)",
+      "Bash(curl -sL \"https://raw.githubusercontent.com/MudBlazor/MudBlazor/v8.15.0/src/MudBlazor/Components/DataGrid/Cell.cs\" -o /c/temp/cell.cs)"
+    ]
+  }
+}

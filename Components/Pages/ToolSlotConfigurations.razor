@@ -1,0 +1,765 @@
+@page "/tool-slot-configurations"
+@inject ToolSlotConfigurationService Service
+@inject ISnackbar Snackbar
+
+<PageTitle>Tool Slot Configurations</PageTitle>
+
+<div class="tsc-page">
+    <MudText Typo="Typo.h5" Class="mb-3">Tool Slot Configurations</MudText>
+
+    <MudPaper Elevation="0" Class="mb-2 pa-2">
+        <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
+            <MudButton Variant="Variant.Filled"
+                       Color="Color.Primary"
+                       StartIcon="@Icons.Material.Filled.Add"
+                       Disabled="@(_editingItem is not null && !IsRowValid(_editingItem))"
+                       OnClick="AddNewAsync">
+                Add New
+            </MudButton>
+
+            <MudTextField T="string"
+                          @bind-Value="_search"
+                          Placeholder="Search all columns..."
+                          Adornment="Adornment.Start"
+                          AdornmentIcon="@Icons.Material.Filled.Search"
+                          Variant="Variant.Outlined"
+                          Margin="Margin.Dense"
+                          Immediate="true"
+                          Disabled="@(_editingItem is not null)"
+                          Class="flex-grow-1" />
+        </MudStack>
+    </MudPaper>
+
+    <MudDataGrid @ref="_grid"
+                 T="ToolSlotConfigurationDTO"
+                 Class="tsc-stable-cols"
+                 Items="_items"
+                 Loading="_loading"
+                 ReadOnly="true"
+                 Filterable="true"
+                 FilterMode="DataGridFilterMode.ColumnFilterMenu"
+                 SortMode="SortMode.Multiple"
+                 Hover="true"
+                 Dense="true"
+                 Bordered="true"
+                 FixedHeader="true"
+                 HorizontalScrollbar="true"
+                 Height="calc(100vh - 260px)"
+                 RowClassFunc="RowClassFunc"
+                 RowClick="OnRowClickAsync"
+                 QuickFilter="@_quickFilter">
+
+        <Columns>
+            <TemplateColumn Title=""
+                            Sortable="false"
+                            Filterable="false"
+                            HeaderClass="tsc-sticky tsc-sticky-action"
+                            CellClass="tsc-sticky tsc-sticky-action">
+                <CellTemplate>
+                    @if (IsEditing(context.Item))
+                    {
+                        <div class="tsc-action-cell"
+                             @onclick="SuppressRowClick"
+                             @onclick:stopPropagation="true">
+                            <MudTooltip Text="Cancel edit">
+                                <MudIconButton Icon="@Icons.Material.Filled.Close"
+                                               Size="Size.Small"
+                                               Color="Color.Error"
+                                               OnClick="@(() => CancelEdit(context.Item))" />
+                            </MudTooltip>
+                        </div>
+                    }
+                </CellTemplate>
+            </TemplateColumn>
+
+            <PropertyColumn Property="x => x.CID" Title="CID"
+                            HeaderClass="tsc-sticky tsc-sticky-cid"
+                            CellClass="tsc-sticky tsc-sticky-cid">
+                <CellTemplate>
+                    <span>@context.Item.CID</span>
+                </CellTemplate>
+                <FilterTemplate>
+                    <ColumnValuesFilter T="ToolSlotConfigurationDTO"
+                                        Context="@context"
+                                        Source="_items"
+                                        ValueSelector="@(x => x.CID.ToString())" />
+                </FilterTemplate>
+            </PropertyColumn>
+
+            <PropertyColumn Property="x => x.FAMILY" Title="FAMILY *"
+                            HeaderClass="tsc-sticky tsc-sticky-family"
+                            CellClass="tsc-sticky tsc-sticky-family">
+                <CellTemplate>
+                    <input type="text"
+                           class="@CellInputClass(context.Item, FieldFamily, context.Item.FAMILY)"
+                           @bind="context.Item.FAMILY"
+                           @bind:event="oninput"
+                           @onblur="@(() => MarkTouched(FieldFamily))"
+                           @onkeydown="@(e => OnKeyDownAsync(e, context.Item))"
+                           readonly="@(!IsEditing(context.Item))" />
+                </CellTemplate>
+                <FilterTemplate>
+                    <ColumnValuesFilter T="ToolSlotConfigurationDTO"
+                                        Context="@context"
+                                        Source="_items"
+                                        ValueSelector="@(x => x.FAMILY)" />
+                </FilterTemplate>
+            </PropertyColumn>
+
+            <PropertyColumn Property="x => x.MT_CODE" Title="MT_CODE *"
+                            HeaderClass="tsc-sticky tsc-sticky-mtcode"
+                            CellClass="tsc-sticky tsc-sticky-mtcode">
+                <CellTemplate>
+                    <input type="text"
+                           class="@CellInputClass(context.Item, FieldMtCode, context.Item.MT_CODE)"
+                           @bind="context.Item.MT_CODE"
+                           @bind:event="oninput"
+                           @onblur="@(() => MarkTouched(FieldMtCode))"
+                           @onkeydown="@(e => OnKeyDownAsync(e, context.Item))"
+                           readonly="@(!IsEditing(context.Item))" />
+                </CellTemplate>
+                <FilterTemplate>
+                    <ColumnValuesFilter T="ToolSlotConfigurationDTO"
+                                        Context="@context"
+                                        Source="_items"
+                                        ValueSelector="@(x => x.MT_CODE)" />
+                </FilterTemplate>
+            </PropertyColumn>
+
+            <PropertyColumn Property="x => x.DESTINATION" Title="DESTINATION *"
+                            HeaderClass="tsc-sticky tsc-sticky-dest"
+                            CellClass="tsc-sticky tsc-sticky-dest">
+                <CellTemplate>
+                    <input type="text"
+                           class="@CellInputClass(context.Item, FieldDestination, context.Item.DESTINATION)"
+                           @bind="context.Item.DESTINATION"
+                           @bind:event="oninput"
+                           @onblur="@(() => MarkTouched(FieldDestination))"
+                           @onkeydown="@(e => OnKeyDownAsync(e, context.Item))"
+                           readonly="@(!IsEditing(context.Item))" />
+                </CellTemplate>
+                <FilterTemplate>
+                    <ColumnValuesFilter T="ToolSlotConfigurationDTO"
+                                        Context="@context"
+                                        Source="_items"
+                                        ValueSelector="@(x => x.DESTINATION)" />
+                </FilterTemplate>
+            </PropertyColumn>
+
+            <PropertyColumn Property="x => x.FCL1" Title="FCL1">
+                <CellTemplate>
+                    <input type="text"
+                           class="tsc-cell-input"
+                           @bind="context.Item.FCL1"
+                           @bind:event="oninput"
+                           @onkeydown="@(e => OnKeyDownAsync(e, context.Item))"
+                           readonly="@(!IsEditing(context.Item))" />
+                </CellTemplate>
+                <FilterTemplate>
+                    <ColumnValuesFilter T="ToolSlotConfigurationDTO"
+                                        Context="@context"
+                                        Source="_items"
+                                        ValueSelector="@(x => x.FCL1)" />
+                </FilterTemplate>
+            </PropertyColumn>
+
+            <PropertyColumn Property="x => x.FCL2" Title="FCL2">
+                <CellTemplate>
+                    <input type="text"
+                           class="tsc-cell-input"
+                           @bind="context.Item.FCL2"
+                           @bind:event="oninput"
+                           @onkeydown="@(e => OnKeyDownAsync(e, context.Item))"
+                           readonly="@(!IsEditing(context.Item))" />
+                </CellTemplate>
+                <FilterTemplate>
+                    <ColumnValuesFilter T="ToolSlotConfigurationDTO"
+                                        Context="@context"
+                                        Source="_items"
+                                        ValueSelector="@(x => x.FCL2)" />
+                </FilterTemplate>
+            </PropertyColumn>
+
+            <PropertyColumn Property="x => x.FCR1" Title="FCR1">
+                <CellTemplate>
+                    <input type="text"
+                           class="tsc-cell-input"
+                           @bind="context.Item.FCR1"
+                           @bind:event="oninput"
+                           @onkeydown="@(e => OnKeyDownAsync(e, context.Item))"
+                           readonly="@(!IsEditing(context.Item))" />
+                </CellTemplate>
+                <FilterTemplate>
+                    <ColumnValuesFilter T="ToolSlotConfigurationDTO"
+                                        Context="@context"
+                                        Source="_items"
+                                        ValueSelector="@(x => x.FCR1)" />
+                </FilterTemplate>
+            </PropertyColumn>
+
+            <PropertyColumn Property="x => x.FFL1" Title="FFL1">
+                <CellTemplate>
+                    <input type="text"
+                           class="tsc-cell-input"
+                           @bind="context.Item.FFL1"
+                           @bind:event="oninput"
+                           @onkeydown="@(e => OnKeyDownAsync(e, context.Item))"
+                           readonly="@(!IsEditing(context.Item))" />
+                </CellTemplate>
+                <FilterTemplate>
+                    <ColumnValuesFilter T="ToolSlotConfigurationDTO"
+                                        Context="@context"
+                                        Source="_items"
+                                        ValueSelector="@(x => x.FFL1)" />
+                </FilterTemplate>
+            </PropertyColumn>
+
+            <PropertyColumn Property="x => x.FFL2" Title="FFL2">
+                <CellTemplate>
+                    <input type="text"
+                           class="tsc-cell-input"
+                           @bind="context.Item.FFL2"
+                           @bind:event="oninput"
+                           @onkeydown="@(e => OnKeyDownAsync(e, context.Item))"
+                           readonly="@(!IsEditing(context.Item))" />
+                </CellTemplate>
+                <FilterTemplate>
+                    <ColumnValuesFilter T="ToolSlotConfigurationDTO"
+                                        Context="@context"
+                                        Source="_items"
+                                        ValueSelector="@(x => x.FFL2)" />
+                </FilterTemplate>
+            </PropertyColumn>
+
+            <PropertyColumn Property="x => x.FFR1" Title="FFR1">
+                <CellTemplate>
+                    <input type="text"
+                           class="tsc-cell-input"
+                           @bind="context.Item.FFR1"
+                           @bind:event="oninput"
+                           @onkeydown="@(e => OnKeyDownAsync(e, context.Item))"
+                           readonly="@(!IsEditing(context.Item))" />
+                </CellTemplate>
+                <FilterTemplate>
+                    <ColumnValuesFilter T="ToolSlotConfigurationDTO"
+                                        Context="@context"
+                                        Source="_items"
+                                        ValueSelector="@(x => x.FFR1)" />
+                </FilterTemplate>
+            </PropertyColumn>
+
+            <PropertyColumn Property="x => x.FFR2" Title="FFR2">
+                <CellTemplate>
+                    <input type="text"
+                           class="tsc-cell-input"
+                           @bind="context.Item.FFR2"
+                           @bind:event="oninput"
+                           @onkeydown="@(e => OnKeyDownAsync(e, context.Item))"
+                           readonly="@(!IsEditing(context.Item))" />
+                </CellTemplate>
+                <FilterTemplate>
+                    <ColumnValuesFilter T="ToolSlotConfigurationDTO"
+                                        Context="@context"
+                                        Source="_items"
+                                        ValueSelector="@(x => x.FFR2)" />
+                </FilterTemplate>
+            </PropertyColumn>
+
+            <PropertyColumn Property="x => x.FFR3" Title="FFR3">
+                <CellTemplate>
+                    <input type="text"
+                           class="tsc-cell-input"
+                           @bind="context.Item.FFR3"
+                           @bind:event="oninput"
+                           @onkeydown="@(e => OnKeyDownAsync(e, context.Item))"
+                           readonly="@(!IsEditing(context.Item))" />
+                </CellTemplate>
+                <FilterTemplate>
+                    <ColumnValuesFilter T="ToolSlotConfigurationDTO"
+                                        Context="@context"
+                                        Source="_items"
+                                        ValueSelector="@(x => x.FFR3)" />
+                </FilterTemplate>
+            </PropertyColumn>
+
+            <PropertyColumn Property="x => x.FFR4" Title="FFR4">
+                <CellTemplate>
+                    <input type="text"
+                           class="tsc-cell-input"
+                           @bind="context.Item.FFR4"
+                           @bind:event="oninput"
+                           @onkeydown="@(e => OnKeyDownAsync(e, context.Item))"
+                           readonly="@(!IsEditing(context.Item))" />
+                </CellTemplate>
+                <FilterTemplate>
+                    <ColumnValuesFilter T="ToolSlotConfigurationDTO"
+                                        Context="@context"
+                                        Source="_items"
+                                        ValueSelector="@(x => x.FFR4)" />
+                </FilterTemplate>
+            </PropertyColumn>
+
+            <PropertyColumn Property="x => x.RCL1" Title="RCL1">
+                <CellTemplate>
+                    <input type="text"
+                           class="tsc-cell-input"
+                           @bind="context.Item.RCL1"
+                           @bind:event="oninput"
+                           @onkeydown="@(e => OnKeyDownAsync(e, context.Item))"
+                           readonly="@(!IsEditing(context.Item))" />
+                </CellTemplate>
+                <FilterTemplate>
+                    <ColumnValuesFilter T="ToolSlotConfigurationDTO"
+                                        Context="@context"
+                                        Source="_items"
+                                        ValueSelector="@(x => x.RCL1)" />
+                </FilterTemplate>
+            </PropertyColumn>
+
+            <PropertyColumn Property="x => x.RCR1" Title="RCR1">
+                <CellTemplate>
+                    <input type="text"
+                           class="tsc-cell-input"
+                           @bind="context.Item.RCR1"
+                           @bind:event="oninput"
+                           @onkeydown="@(e => OnKeyDownAsync(e, context.Item))"
+                           readonly="@(!IsEditing(context.Item))" />
+                </CellTemplate>
+                <FilterTemplate>
+                    <ColumnValuesFilter T="ToolSlotConfigurationDTO"
+                                        Context="@context"
+                                        Source="_items"
+                                        ValueSelector="@(x => x.RCR1)" />
+                </FilterTemplate>
+            </PropertyColumn>
+
+            <PropertyColumn Property="x => x.RCR2" Title="RCR2">
+                <CellTemplate>
+                    <input type="text"
+                           class="tsc-cell-input"
+                           @bind="context.Item.RCR2"
+                           @bind:event="oninput"
+                           @onkeydown="@(e => OnKeyDownAsync(e, context.Item))"
+                           readonly="@(!IsEditing(context.Item))" />
+                </CellTemplate>
+                <FilterTemplate>
+                    <ColumnValuesFilter T="ToolSlotConfigurationDTO"
+                                        Context="@context"
+                                        Source="_items"
+                                        ValueSelector="@(x => x.RCR2)" />
+                </FilterTemplate>
+            </PropertyColumn>
+
+            <PropertyColumn Property="x => x.RFL1" Title="RFL1">
+                <CellTemplate>
+                    <input type="text"
+                           class="tsc-cell-input"
+                           @bind="context.Item.RFL1"
+                           @bind:event="oninput"
+                           @onkeydown="@(e => OnKeyDownAsync(e, context.Item))"
+                           readonly="@(!IsEditing(context.Item))" />
+                </CellTemplate>
+                <FilterTemplate>
+                    <ColumnValuesFilter T="ToolSlotConfigurationDTO"
+                                        Context="@context"
+                                        Source="_items"
+                                        ValueSelector="@(x => x.RFL1)" />
+                </FilterTemplate>
+            </PropertyColumn>
+
+            <PropertyColumn Property="x => x.RFR1" Title="RFR1">
+                <CellTemplate>
+                    <input type="text"
+                           class="tsc-cell-input"
+                           @bind="context.Item.RFR1"
+                           @bind:event="oninput"
+                           @onkeydown="@(e => OnKeyDownAsync(e, context.Item))"
+                           readonly="@(!IsEditing(context.Item))" />
+                </CellTemplate>
+                <FilterTemplate>
+                    <ColumnValuesFilter T="ToolSlotConfigurationDTO"
+                                        Context="@context"
+                                        Source="_items"
+                                        ValueSelector="@(x => x.RFR1)" />
+                </FilterTemplate>
+            </PropertyColumn>
+
+            <PropertyColumn Property="x => x.RFR2" Title="RFR2">
+                <CellTemplate>
+                    <input type="text"
+                           class="tsc-cell-input"
+                           @bind="context.Item.RFR2"
+                           @bind:event="oninput"
+                           @onkeydown="@(e => OnKeyDownAsync(e, context.Item))"
+                           readonly="@(!IsEditing(context.Item))" />
+                </CellTemplate>
+                <FilterTemplate>
+                    <ColumnValuesFilter T="ToolSlotConfigurationDTO"
+                                        Context="@context"
+                                        Source="_items"
+                                        ValueSelector="@(x => x.RFR2)" />
+                </FilterTemplate>
+            </PropertyColumn>
+
+            <PropertyColumn Property="x => x.IsActive" Title="IsActive">
+                <CellTemplate>
+                    <MudCheckBox T="bool"
+                                 Value="@context.Item.IsActive"
+                                 ValueChanged="@(async (bool b) => await OnIsActiveChangedAsync(b, context.Item))"
+                                 Dense="true"
+                                 Color="Color.Primary" />
+                </CellTemplate>
+                <FilterTemplate>
+                    <ColumnValuesFilter T="ToolSlotConfigurationDTO"
+                                        Context="@context"
+                                        Source="_items"
+                                        ValueSelector="@(x => x.IsActive ? bool.TrueString : bool.FalseString)" />
+                </FilterTemplate>
+            </PropertyColumn>
+        </Columns>
+
+        <NoRecordsContent>
+            <MudText>No records found.</MudText>
+        </NoRecordsContent>
+        <LoadingContent>
+            <MudText>Loading...</MudText>
+        </LoadingContent>
+    </MudDataGrid>
+</div>
+
+@code {
+    private const string FieldFamily = "FAMILY";
+    private const string FieldMtCode = "MT_CODE";
+    private const string FieldDestination = "DESTINATION";
+
+    private MudDataGrid<ToolSlotConfigurationDTO> _grid = null!;
+    private List<ToolSlotConfigurationDTO> _items = new();
+    private bool _loading = true;
+    private string? _search;
+
+    private ToolSlotConfigurationDTO? _editingItem;
+    private ToolSlotConfigurationDTO? _editingSnapshot;
+
+    private readonly HashSet<string> _touched = new(StringComparer.Ordinal);
+
+    private bool IsEditing(ToolSlotConfigurationDTO item) =>
+        ReferenceEquals(_editingItem, item);
+
+    private string RowClassFunc(ToolSlotConfigurationDTO item, int rowIndex) =>
+        ReferenceEquals(_editingItem, item) ? "tsc-editing-row" : string.Empty;
+
+    private string CellInputClass(ToolSlotConfigurationDTO item, string fieldName, string? value) =>
+        ReferenceEquals(_editingItem, item)
+        && _touched.Contains(fieldName)
+        && string.IsNullOrWhiteSpace(value)
+            ? "tsc-cell-input tsc-cell-input-error"
+            : "tsc-cell-input";
+
+    private void MarkTouched(string fieldName)
+    {
+        if (_editingItem is null)
+            return;
+        _touched.Add(fieldName);
+    }
+
+    private void MarkAllRequiredTouched()
+    {
+        _touched.Add(FieldFamily);
+        _touched.Add(FieldMtCode);
+        _touched.Add(FieldDestination);
+    }
+
+    // Swallows the click on the cancel-button wrapper so it can be paired
+    // with @onclick:stopPropagation="true". Without this, clicking Cancel
+    // would bubble up to MudDataGrid's RowClick and immediately re-open
+    // the edit on the same row.
+    private void SuppressRowClick()
+    {
+    }
+
+    private Func<ToolSlotConfigurationDTO, bool> _quickFilter => x =>
+    {
+        // Always keep the row currently being edited visible.
+        if (ReferenceEquals(_editingItem, x))
+            return true;
+
+        if (string.IsNullOrWhiteSpace(_search))
+            return true;
+
+        var s = _search.Trim();
+
+        if (x.CID.ToString().Contains(s, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return Has(x.FAMILY) || Has(x.MT_CODE) || Has(x.DESTINATION)
+            || Has(x.FCL1) || Has(x.FCL2) || Has(x.FCR1)
+            || Has(x.FFL1) || Has(x.FFL2)
+            || Has(x.FFR1) || Has(x.FFR2) || Has(x.FFR3) || Has(x.FFR4)
+            || Has(x.RCL1) || Has(x.RCR1) || Has(x.RCR2)
+            || Has(x.RFL1) || Has(x.RFR1) || Has(x.RFR2)
+            || (x.IsActive ? "true" : "false").Contains(s, StringComparison.OrdinalIgnoreCase);
+
+        bool Has(string? v) => !string.IsNullOrEmpty(v) && v.Contains(s, StringComparison.OrdinalIgnoreCase);
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ReloadAsync();
+    }
+
+    private async Task ReloadAsync()
+    {
+        _loading = true;
+        try
+        {
+            _items = await Service.GetAllAsync();
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+
+    private async Task OnRowClickAsync(DataGridRowClickEventArgs<ToolSlotConfigurationDTO> args)
+    {
+        await TryStartEditAsync(args.Item);
+    }
+
+    private async Task TryStartEditAsync(ToolSlotConfigurationDTO item)
+    {
+        if (ReferenceEquals(_editingItem, item))
+            return;
+
+        if (_editingItem is not null)
+        {
+            if (!IsRowValid(_editingItem))
+            {
+                MarkAllRequiredTouched();
+                Snackbar.Add(
+                    "FAMILY, MT_CODE, and DESTINATION are required. Complete the current row before switching.",
+                    Severity.Warning);
+                return;
+            }
+
+            if (HasChanges(_editingItem, _editingSnapshot))
+            {
+                var saved = await PersistAsync(_editingItem);
+                if (!saved)
+                    return;
+            }
+
+            _editingItem = null;
+            _editingSnapshot = null;
+            _touched.Clear();
+        }
+
+        _editingSnapshot = Clone(item);
+        _editingItem = item;
+        _touched.Clear();
+    }
+
+    private async Task OnKeyDownAsync(KeyboardEventArgs e, ToolSlotConfigurationDTO item)
+    {
+        if (!ReferenceEquals(_editingItem, item))
+            return;
+
+        if (e.Key == "Enter")
+        {
+            if (!IsRowValid(item))
+            {
+                MarkAllRequiredTouched();
+                Snackbar.Add(
+                    "FAMILY, MT_CODE, and DESTINATION are required.",
+                    Severity.Warning);
+                return;
+            }
+
+            if (HasChanges(item, _editingSnapshot))
+            {
+                var saved = await PersistAsync(item);
+                if (!saved)
+                    return;
+            }
+
+            _editingItem = null;
+            _editingSnapshot = null;
+            _touched.Clear();
+        }
+        else if (e.Key == "Escape")
+        {
+            CancelEdit(item);
+        }
+    }
+
+    private async Task OnIsActiveChangedAsync(bool newValue, ToolSlotConfigurationDTO item)
+    {
+        if (!ReferenceEquals(_editingItem, item))
+        {
+            await TryStartEditAsync(item);
+            // Edit start was blocked: do not apply the new value.
+            if (!ReferenceEquals(_editingItem, item))
+                return;
+        }
+
+        item.IsActive = newValue;
+    }
+
+    private void CancelEdit(ToolSlotConfigurationDTO item)
+    {
+        if (item.CID == 0)
+        {
+            // Brand-new row that was never persisted — discard it.
+            _items = _items.Where(x => !ReferenceEquals(x, item)).ToList();
+        }
+        else if (_editingSnapshot is not null && ReferenceEquals(_editingItem, item))
+        {
+            RestoreFrom(_editingSnapshot, item);
+        }
+
+        _editingItem = null;
+        _editingSnapshot = null;
+        _touched.Clear();
+    }
+
+    private async Task AddNewAsync()
+    {
+        if (_editingItem is not null)
+        {
+            if (!IsRowValid(_editingItem))
+            {
+                MarkAllRequiredTouched();
+                Snackbar.Add(
+                    "FAMILY, MT_CODE, and DESTINATION are required on the current row before adding a new one.",
+                    Severity.Warning);
+                return;
+            }
+
+            if (HasChanges(_editingItem, _editingSnapshot))
+            {
+                var saved = await PersistAsync(_editingItem);
+                if (!saved)
+                    return;
+            }
+
+            _editingItem = null;
+            _editingSnapshot = null;
+            _touched.Clear();
+        }
+
+        var newItem = new ToolSlotConfigurationDTO { IsActive = true };
+        _items = _items.Append(newItem).ToList();
+        _editingItem = newItem;
+        _editingSnapshot = null;
+        _touched.Clear();
+    }
+
+    private async Task<bool> PersistAsync(ToolSlotConfigurationDTO item)
+    {
+        if (item.CID == 0)
+        {
+            var created = await Service.CreateAsync(item);
+            var idx = _items.IndexOf(item);
+            if (idx >= 0)
+            {
+                var updated = new List<ToolSlotConfigurationDTO>(_items);
+                updated[idx] = created;
+                // Re-sort so the new row drops into its natural CID-ascending
+                // position instead of staying pinned at the top where the
+                // temporary CID=0 placeholder was prepended by AddNewAsync.
+                _items = updated.OrderBy(x => x.CID).ToList();
+            }
+            Snackbar.Add($"Created CID {created.CID}.", Severity.Success);
+            return true;
+        }
+        else
+        {
+            var ok = await Service.UpdateAsync(item);
+            Snackbar.Add(
+                ok ? $"Saved CID {item.CID}." : $"Update failed for CID {item.CID}.",
+                ok ? Severity.Success : Severity.Error);
+            return ok;
+        }
+    }
+
+    private static bool IsRowValid(ToolSlotConfigurationDTO item) =>
+        !string.IsNullOrWhiteSpace(item.FAMILY)
+        && !string.IsNullOrWhiteSpace(item.MT_CODE)
+        && !string.IsNullOrWhiteSpace(item.DESTINATION);
+
+    // Brand-new rows (no snapshot) are always treated as dirty so the
+    // CreateAsync call still runs. For existing rows, every persisted
+    // field is compared against the snapshot taken when the edit started;
+    // only a real field change counts as dirty.
+    private static bool HasChanges(ToolSlotConfigurationDTO current, ToolSlotConfigurationDTO? snapshot)
+    {
+        if (snapshot is null)
+            return true;
+
+        return !string.Equals(current.FAMILY,      snapshot.FAMILY,      StringComparison.Ordinal)
+            || !string.Equals(current.MT_CODE,     snapshot.MT_CODE,     StringComparison.Ordinal)
+            || !string.Equals(current.DESTINATION, snapshot.DESTINATION, StringComparison.Ordinal)
+            || !string.Equals(current.FCL1,        snapshot.FCL1,        StringComparison.Ordinal)
+            || !string.Equals(current.FCL2,        snapshot.FCL2,        StringComparison.Ordinal)
+            || !string.Equals(current.FCR1,        snapshot.FCR1,        StringComparison.Ordinal)
+            || !string.Equals(current.FFL1,        snapshot.FFL1,        StringComparison.Ordinal)
+            || !string.Equals(current.FFL2,        snapshot.FFL2,        StringComparison.Ordinal)
+            || !string.Equals(current.FFR1,        snapshot.FFR1,        StringComparison.Ordinal)
+            || !string.Equals(current.FFR2,        snapshot.FFR2,        StringComparison.Ordinal)
+            || !string.Equals(current.FFR3,        snapshot.FFR3,        StringComparison.Ordinal)
+            || !string.Equals(current.FFR4,        snapshot.FFR4,        StringComparison.Ordinal)
+            || !string.Equals(current.RCL1,        snapshot.RCL1,        StringComparison.Ordinal)
+            || !string.Equals(current.RCR1,        snapshot.RCR1,        StringComparison.Ordinal)
+            || !string.Equals(current.RCR2,        snapshot.RCR2,        StringComparison.Ordinal)
+            || !string.Equals(current.RFL1,        snapshot.RFL1,        StringComparison.Ordinal)
+            || !string.Equals(current.RFR1,        snapshot.RFR1,        StringComparison.Ordinal)
+            || !string.Equals(current.RFR2,        snapshot.RFR2,        StringComparison.Ordinal)
+            || current.IsActive != snapshot.IsActive;
+    }
+
+    private static ToolSlotConfigurationDTO Clone(ToolSlotConfigurationDTO src) => new()
+    {
+        CID = src.CID,
+        FAMILY = src.FAMILY,
+        MT_CODE = src.MT_CODE,
+        DESTINATION = src.DESTINATION,
+        FCL1 = src.FCL1,
+        FCL2 = src.FCL2,
+        FCR1 = src.FCR1,
+        FFL1 = src.FFL1,
+        FFL2 = src.FFL2,
+        FFR1 = src.FFR1,
+        FFR2 = src.FFR2,
+        FFR3 = src.FFR3,
+        FFR4 = src.FFR4,
+        RCL1 = src.RCL1,
+        RCR1 = src.RCR1,
+        RCR2 = src.RCR2,
+        RFL1 = src.RFL1,
+        RFR1 = src.RFR1,
+        RFR2 = src.RFR2,
+        IsActive = src.IsActive
+    };
+
+    private static void RestoreFrom(ToolSlotConfigurationDTO src, ToolSlotConfigurationDTO dst)
+    {
+        dst.FAMILY = src.FAMILY;
+        dst.MT_CODE = src.MT_CODE;
+        dst.DESTINATION = src.DESTINATION;
+        dst.FCL1 = src.FCL1;
+        dst.FCL2 = src.FCL2;
+        dst.FCR1 = src.FCR1;
+        dst.FFL1 = src.FFL1;
+        dst.FFL2 = src.FFL2;
+        dst.FFR1 = src.FFR1;
+        dst.FFR2 = src.FFR2;
+        dst.FFR3 = src.FFR3;
+        dst.FFR4 = src.FFR4;
+        dst.RCL1 = src.RCL1;
+        dst.RCR1 = src.RCR1;
+        dst.RCR2 = src.RCR2;
+        dst.RFL1 = src.RFL1;
+        dst.RFR1 = src.RFR1;
+        dst.RFR2 = src.RFR2;
+        dst.IsActive = src.IsActive;
+    }
+}

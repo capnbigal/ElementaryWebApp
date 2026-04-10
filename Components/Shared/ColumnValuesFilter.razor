@@ -1,0 +1,189 @@
+@typeparam T
+
+<MudStack Spacing="1" Class="pa-2" Style="min-width: 240px; max-width: 320px;">
+    <MudTextField T="string"
+                  @bind-Value="_search"
+                  Placeholder="Search values..."
+                  Adornment="Adornment.Start"
+                  AdornmentIcon="@Icons.Material.Filled.Search"
+                  Variant="Variant.Outlined"
+                  Margin="Margin.Dense"
+                  Immediate="true" />
+
+    <MudCheckBox T="bool"
+                 Value="_allSelected"
+                 ValueChanged="ToggleAll"
+                 Label="(Select All)"
+                 Dense="true"
+                 Color="Color.Primary" />
+
+    <MudDivider />
+
+    <div style="max-height: 240px; overflow-y: auto;">
+        @foreach (var v in VisibleValues)
+        {
+            var current = v;
+            <MudCheckBox T="bool"
+                         Value="@_selected.Contains(current)"
+                         ValueChanged="@((bool b) => Toggle(current, b))"
+                         Label="@(string.IsNullOrEmpty(current) ? "(Blanks)" : current)"
+                         Dense="true"
+                         Color="Color.Primary" />
+        }
+    </div>
+
+    <MudDivider />
+
+    <MudStack Row="true" Justify="Justify.FlexEnd" Spacing="1">
+        <MudButton Size="Size.Small" OnClick="ClearAsync">Clear</MudButton>
+        <MudButton Size="Size.Small"
+                   Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   OnClick="ApplyAsync">Apply</MudButton>
+    </MudStack>
+</MudStack>
+
+@code {
+    [Parameter, EditorRequired] public FilterContext<T> Context { get; set; } = default!;
+    [Parameter, EditorRequired] public IEnumerable<T> Source { get; set; } = default!;
+    [Parameter, EditorRequired] public Func<T, string?> ValueSelector { get; set; } = default!;
+
+    private readonly HashSet<string> _selected = new(StringComparer.Ordinal);
+    private List<string> _allValues = new();
+    private string _search = string.Empty;
+    private bool _allSelected = true;
+    private bool _initialized;
+
+    protected override void OnParametersSet()
+    {
+        _allValues = Source
+            .Select(x => ValueSelector(x) ?? string.Empty)
+            .Distinct(StringComparer.Ordinal)
+            .OrderBy(x => x, NaturalStringComparer)
+            .ToList();
+
+        if (!_initialized)
+        {
+            _selected.Clear();
+            foreach (var v in _allValues)
+            {
+                _selected.Add(v);
+            }
+            _allSelected = true;
+            _initialized = true;
+        }
+    }
+
+    private IEnumerable<string> VisibleValues =>
+        string.IsNullOrWhiteSpace(_search)
+            ? _allValues
+            : _allValues.Where(v => v.Contains(_search, StringComparison.OrdinalIgnoreCase));
+
+    private void Toggle(string value, bool isChecked)
+    {
+        if (isChecked)
+        {
+            _selected.Add(value);
+        }
+        else
+        {
+            _selected.Remove(value);
+        }
+        _allSelected = _selected.Count == _allValues.Count;
+    }
+
+    private void ToggleAll(bool isChecked)
+    {
+        _allSelected = isChecked;
+        _selected.Clear();
+        if (isChecked)
+        {
+            foreach (var v in _allValues)
+            {
+                _selected.Add(v);
+            }
+        }
+    }
+
+    private async Task ApplyAsync()
+    {
+        var snapshot = new HashSet<string>(_selected, StringComparer.Ordinal);
+        var selector = ValueSelector;
+
+        var filter = new FilterDefinition<T>
+        {
+            Column = Context.FilterDefinition?.Column,
+            FilterFunction = item => snapshot.Contains(selector(item) ?? string.Empty)
+        };
+
+        await Context.Actions.ApplyFilterAsync(filter);
+    }
+
+    private async Task ClearAsync()
+    {
+        ToggleAll(true);
+        if (Context.FilterDefinition is not null)
+        {
+            await Context.Actions.ClearFilterAsync(Context.FilterDefinition);
+        }
+    }
+
+    // Natural-order comparer: digit runs compare numerically (so 1, 4, 222
+    // sorts in that order, not 1, 222, 4), letter runs compare
+    // case-insensitively. Leading zeros don't affect numeric value but
+    // act as a stable tie-breaker.
+    private static readonly IComparer<string> NaturalStringComparer =
+        Comparer<string>.Create(NaturalCompare);
+
+    private static int NaturalCompare(string? a, string? b)
+    {
+        a ??= string.Empty;
+        b ??= string.Empty;
+
+        int ia = 0, ib = 0;
+        while (ia < a.Length && ib < b.Length)
+        {
+            bool da = char.IsDigit(a[ia]);
+            bool db = char.IsDigit(b[ib]);
+
+            if (da && db)
+            {
+                int startA = ia, startB = ib;
+                while (ia < a.Length && char.IsDigit(a[ia])) ia++;
+                while (ib < b.Length && char.IsDigit(b[ib])) ib++;
+
+                int zA = startA;
+                while (zA < ia - 1 && a[zA] == '0') zA++;
+                int zB = startB;
+                while (zB < ib - 1 && b[zB] == '0') zB++;
+
+                int lenA = ia - zA;
+                int lenB = ib - zB;
+                if (lenA != lenB)
+                    return lenA - lenB;
+
+                for (int k = 0; k < lenA; k++)
+                {
+                    int c = a[zA + k] - b[zB + k];
+                    if (c != 0)
+                        return c;
+                }
+
+                int leadA = zA - startA;
+                int leadB = zB - startB;
+                if (leadA != leadB)
+                    return leadA - leadB;
+            }
+            else
+            {
+                int c = char.ToUpperInvariant(a[ia]).CompareTo(char.ToUpperInvariant(b[ib]));
+                if (c != 0)
+                    return c;
+                ia++;
+                ib++;
+            }
+        }
+
+        return (a.Length - ia) - (b.Length - ib);
+    }
+}

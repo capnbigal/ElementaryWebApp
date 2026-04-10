@@ -1,0 +1,143 @@
+@page "/tool-slot-configurations/audit"
+@inject ToolSlotConfigurationAuditService Service
+
+<PageTitle>Tool Slot Configurations — Audit History</PageTitle>
+
+<div class="tsc-page">
+    <MudText Typo="Typo.h5" Class="mb-3">Tool Slot Configurations — Audit History</MudText>
+
+    <MudPaper Elevation="0" Class="mb-2 pa-2">
+        <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
+            <MudTextField T="string"
+                          @bind-Value="_search"
+                          Placeholder="Search all columns..."
+                          Adornment="Adornment.Start"
+                          AdornmentIcon="@Icons.Material.Filled.Search"
+                          Variant="Variant.Outlined"
+                          Margin="Margin.Dense"
+                          Immediate="true"
+                          Class="flex-grow-1" />
+        </MudStack>
+    </MudPaper>
+
+    <MudDataGrid T="ToolSlotConfigurationAuditDTO"
+                 Items="_items"
+                 Loading="_loading"
+                 ReadOnly="true"
+                 Filterable="true"
+                 FilterMode="DataGridFilterMode.ColumnFilterMenu"
+                 SortMode="SortMode.Multiple"
+                 Hover="true"
+                 Dense="true"
+                 Bordered="true"
+                 FixedHeader="true"
+                 HorizontalScrollbar="true"
+                 Height="calc(100vh - 260px)"
+                 QuickFilter="@_quickFilter">
+
+        <Columns>
+            <PropertyColumn Property="x => x.CID" Title="CID">
+                <FilterTemplate>
+                    <ColumnValuesFilter T="ToolSlotConfigurationAuditDTO"
+                                        Context="@context"
+                                        Source="_items"
+                                        ValueSelector="@(x => x.CID.ToString())" />
+                </FilterTemplate>
+            </PropertyColumn>
+
+            <PropertyColumn Property="x => x.FieldName" Title="Field">
+                <FilterTemplate>
+                    <ColumnValuesFilter T="ToolSlotConfigurationAuditDTO"
+                                        Context="@context"
+                                        Source="_items"
+                                        ValueSelector="@(x => x.FieldName)" />
+                </FilterTemplate>
+            </PropertyColumn>
+
+            <PropertyColumn Property="x => x.OldValue" Title="Old Value">
+                <FilterTemplate>
+                    <ColumnValuesFilter T="ToolSlotConfigurationAuditDTO"
+                                        Context="@context"
+                                        Source="_items"
+                                        ValueSelector="@(x => x.OldValue)" />
+                </FilterTemplate>
+            </PropertyColumn>
+
+            <PropertyColumn Property="x => x.NewValue" Title="New Value">
+                <FilterTemplate>
+                    <ColumnValuesFilter T="ToolSlotConfigurationAuditDTO"
+                                        Context="@context"
+                                        Source="_items"
+                                        ValueSelector="@(x => x.NewValue)" />
+                </FilterTemplate>
+            </PropertyColumn>
+
+            <PropertyColumn Property="x => x.EditDate" Title="Edit Date" Format="yyyy-MM-dd HH:mm:ss">
+                <FilterTemplate>
+                    <ColumnValuesFilter T="ToolSlotConfigurationAuditDTO"
+                                        Context="@context"
+                                        Source="_items"
+                                        ValueSelector="@(x => x.EditDate.ToString("yyyy-MM-dd HH:mm:ss"))" />
+                </FilterTemplate>
+            </PropertyColumn>
+
+            <PropertyColumn Property="x => x.User" Title="User">
+                <FilterTemplate>
+                    <ColumnValuesFilter T="ToolSlotConfigurationAuditDTO"
+                                        Context="@context"
+                                        Source="_items"
+                                        ValueSelector="@(x => x.User)" />
+                </FilterTemplate>
+            </PropertyColumn>
+        </Columns>
+
+        <NoRecordsContent>
+            <MudText>No audit records found.</MudText>
+        </NoRecordsContent>
+        <LoadingContent>
+            <MudText>Loading...</MudText>
+        </LoadingContent>
+    </MudDataGrid>
+</div>
+
+@code {
+    private List<ToolSlotConfigurationAuditDTO> _items = new();
+    private bool _loading = true;
+    private string? _search;
+
+    private Func<ToolSlotConfigurationAuditDTO, bool> _quickFilter => x =>
+    {
+        if (string.IsNullOrWhiteSpace(_search))
+            return true;
+
+        var s = _search.Trim();
+
+        if (x.CID.ToString().Contains(s, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        if (x.EditDate.ToString("yyyy-MM-dd HH:mm:ss").Contains(s, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return Has(x.FieldName) || Has(x.OldValue) || Has(x.NewValue) || Has(x.User);
+
+        bool Has(string? v) => !string.IsNullOrEmpty(v) && v.Contains(s, StringComparison.OrdinalIgnoreCase);
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ReloadAsync();
+    }
+
+    private async Task ReloadAsync()
+    {
+        _loading = true;
+        try
+        {
+            _items = await Service.GetAllAsync();
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+}
