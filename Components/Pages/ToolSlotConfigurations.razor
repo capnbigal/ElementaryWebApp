@@ -44,7 +44,7 @@
                  Bordered="true"
                  FixedHeader="true"
                  HorizontalScrollbar="true"
-                 Height="calc(100vh - 260px)"
+                 Height="calc(100vh - 312px)"
                  RowClassFunc="RowClassFunc"
                  RowClick="OnRowClickAsync"
                  QuickFilter="@_quickFilter">
@@ -150,6 +150,8 @@
             {
                 var c = col;
                 <TemplateColumn @key="c.Title" Title="@c.Title"
+                                Sortable="true"
+                                Filterable="true"
                                 SortBy="@(x => c.Get(x) ?? string.Empty)">
                     <CellTemplate>
                         <input type="text"
@@ -184,6 +186,11 @@
                 </FilterTemplate>
             </PropertyColumn>
         </Columns>
+
+        <PagerContent>
+            <MudDataGridPager T="ToolSlotConfigurationDTO"
+                              PageSizeOptions="new[] { 10, 25, 50, 100 }" />
+        </PagerContent>
 
         <NoRecordsContent>
             <MudText>No records found.</MudText>

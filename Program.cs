@@ -1,38 +1,12 @@
-using ElementaryBridgeApp.Components;
-using ElementaryBridgeApp.Data;
-using Microsoft.EntityFrameworkCore;
-using MudBlazor.Services;
+using ElementaryBridgeApp;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents();
-
-builder.Services.AddMudServices();
-
-builder.Services.AddDbContextFactory<ElementaryDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("ElementaryDB")));
-
-builder.Services.AddScoped<ToolSlotConfigurationService>();
-builder.Services.AddScoped<ToolSlotConfigurationAuditService>();
+var startup = new Startup(builder.Configuration);
+startup.ConfigureServices(builder.Services);
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Error", createScopeForErrors: true);
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
-}
-app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages: true);
-app.UseHttpsRedirection();
-
-app.UseAntiforgery();
-
-app.MapStaticAssets();
-app.MapRazorComponents<App>()
-    .AddInteractiveServerRenderMode();
+startup.Configure(app, app.Environment);
 
 app.Run();
